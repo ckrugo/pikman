@@ -11,7 +11,12 @@ OVERVIEW: Project used to learn python graphics library for a fun twist on a cla
 -----------------------------------------------------------
 """
 
-from graphics import *
+from graphics import Circle
+from graphics import GraphWin
+from graphics import Point
+from graphics import Polygon
+from graphics import Rectangle
+from graphics import Text
 # Used John Zelle's graphics lib from https://mcsp.wartburg.edu/zelle/python/graphics.py
 import time
 
@@ -47,9 +52,9 @@ def draw_board(current_board):
         for boardColumn in range(gameBoardSize[1]):
             check_color = gameColor[gameBoard[boardRow][boardColumn]]
             if check_color == "blue":
-               draw_rec(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
+                draw_rec(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
             else:
-               draw_circle(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
+                draw_circle(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
 
 
 def erase_board(current_board):
@@ -98,8 +103,10 @@ def draw_pikman(pik_location, pik_color1):
     else:
         pik_color1 = "yellow"
         draw_circle(pik_location[1], pik_location[0], pik_color1, size)
-#        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)), (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
-        head1 = Polygon(Point((pik_location[1] * (size * 2) + (offsetC + size)), (pik_location[0] * (size * 2) + (offsetR+size))),
+#        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)),
+        #        (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
+        head1 = Polygon(Point((pik_location[1] * (size * 2) + (offsetC + size)),
+                              (pik_location[0] * (size * 2) + (offsetR+size))),
                         Point((pik_location[1] * (size * 2) + offsetC + size*2),
                               (pik_location[0] * (size * 2) + offsetR + size*2)),
                         Point((pik_location[1] * (size * 2) + offsetC + size*2),
@@ -134,25 +141,25 @@ def move_pikman(pik_move):
     draw_circle(pikLocation[1], pikLocation[0], gameColor[0], size)
     global pikScore
 
-    if pik_move == 'X' or pik_move == 'x':  # Down
+    if pik_move == 'X' or pik_move == 'x' :  # Down
         print("check " + str(gameBoard[pikLocation[0] - 1][pikLocation[1] - 0]))
         check_score((pikLocation[0] - 1),(pikLocation[1] - 0))
         if gameBoard[pikLocation[0] - 1][pikLocation[1] - 0] != 1:
             pikLocation[0] = pikLocation[0] - 1
             pikLocation[1] = pikLocation[1] - 0
-    elif pik_move == 'D' or pik_move == 'd':  # Right
+    elif pik_move == 'D' or pik_move == 'd' :  # Right
         print("check " + str(gameBoard[pikLocation[0] + 0][pikLocation[1] + 1]))
         check_score((pikLocation[0] + 0),(pikLocation[1] + 1))
         if gameBoard[pikLocation[0] + 0][pikLocation[1] + 1] != 1:
             pikLocation[0] = pikLocation[0] + 0
             pikLocation[1] = pikLocation[1] + 1
-    elif pik_move == 'W' or pik_move == 'w':  # Up
+    elif pik_move == 'W' or pik_move == 'w' :  # Up
         print("check " + str(gameBoard[pikLocation[0] + 1][pikLocation[1] + 0]))
         check_score((pikLocation[0] + 1),(pikLocation[1] + 0))
         if gameBoard[pikLocation[0] + 1][pikLocation[1] + 0] != 1:
             pikLocation[0] = pikLocation[0] + 1
             pikLocation[1] = pikLocation[1] + 0
-    elif pik_move == 'A' or pik_move == 'a':  # Left
+    elif pik_move == 'A' or pik_move == 'a' :  # Left
         print("check " + str(gameBoard[pikLocation[0] - 0][pikLocation[1] - 1]))
         check_score((pikLocation[0] - 0),(pikLocation[1] - 1))
         if gameBoard[pikLocation[0] - 0][pikLocation[1] - 1] != 1:
@@ -227,7 +234,7 @@ print('hello, pikman')
 print(gameBoard[1][2])
 
 win.setBackground("black")
-#win.setBackground("white")
+# win.setBackground("white")
 draw_board(gameBoard)
 
 noticeText = Text(Point(win.getWidth() / 2, 250), "Welcome to Wonderland")
