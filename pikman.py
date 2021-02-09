@@ -141,27 +141,27 @@ def move_pikman(pik_move):
     draw_circle(pikLocation[1], pikLocation[0], gameColor[0], size)
     global pikScore
 
-    if pik_move == 'X' or pik_move == 'x' :  # Down
+    if pik_move == 'X' or pik_move == 'x':  # Down
         print("check " + str(gameBoard[pikLocation[0] - 1][pikLocation[1] - 0]))
-        check_score((pikLocation[0] - 1),(pikLocation[1] - 0))
+        check_score((pikLocation[0] - 1), (pikLocation[1] - 0))
         if gameBoard[pikLocation[0] - 1][pikLocation[1] - 0] != 1:
             pikLocation[0] = pikLocation[0] - 1
             pikLocation[1] = pikLocation[1] - 0
-    elif pik_move == 'D' or pik_move == 'd' :  # Right
+    elif pik_move == 'D' or pik_move == 'd':  # Right
         print("check " + str(gameBoard[pikLocation[0] + 0][pikLocation[1] + 1]))
-        check_score((pikLocation[0] + 0),(pikLocation[1] + 1))
+        check_score((pikLocation[0] + 0), (pikLocation[1] + 1))
         if gameBoard[pikLocation[0] + 0][pikLocation[1] + 1] != 1:
             pikLocation[0] = pikLocation[0] + 0
             pikLocation[1] = pikLocation[1] + 1
-    elif pik_move == 'W' or pik_move == 'w' :  # Up
+    elif pik_move == 'W' or pik_move == 'w':  # Up
         print("check " + str(gameBoard[pikLocation[0] + 1][pikLocation[1] + 0]))
-        check_score((pikLocation[0] + 1),(pikLocation[1] + 0))
+        check_score((pikLocation[0] + 1), (pikLocation[1] + 0))
         if gameBoard[pikLocation[0] + 1][pikLocation[1] + 0] != 1:
             pikLocation[0] = pikLocation[0] + 1
             pikLocation[1] = pikLocation[1] + 0
-    elif pik_move == 'A' or pik_move == 'a' :  # Left
+    elif pik_move == 'A' or pik_move == 'a':  # Left
         print("check " + str(gameBoard[pikLocation[0] - 0][pikLocation[1] - 1]))
-        check_score((pikLocation[0] - 0),(pikLocation[1] - 1))
+        check_score((pikLocation[0] - 0), (pikLocation[1] - 1))
         if gameBoard[pikLocation[0] - 0][pikLocation[1] - 1] != 1:
             pikLocation[0] = pikLocation[0] - 0
             pikLocation[1] = pikLocation[1] - 1
