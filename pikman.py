@@ -196,9 +196,12 @@ pikColor = 2
 pikScore = 0
 maxScore = 590
 
-size = 10
+size = 20 # 10 is the minimum for now
 offsetC = size * 4
 offsetR = size * 2
+win = GraphWin("pikMan", (size * 20), (size * 30))
+win.setCoords(size, size, (size * 20), (size * 30))
+
 gameStart = time.time()
 gameTimer = 0.0
 gameDuration = 25
@@ -207,8 +210,6 @@ alive = True
 print('hello, pikman')
 print(gameBoard[1][2])
 
-win = GraphWin("pikMan", 200, 300)
-win.setCoords(0, 0, 200, 300)
 win.setBackground("black")
 #win.setBackground("white")
 draw_board(gameBoard)
