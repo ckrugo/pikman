@@ -160,12 +160,12 @@ __version__ = "5.0"
 #     Added ability to set text atttributes.
 #     Added Entry boxes.
 
-import time, os, sys
+import time, os  # , sys
 
 try:  # import as appropriate for 2.x vs. 3.x
-   import tkinter as tk
+    import tkinter as tk
 except:
-   import Tkinter as tk
+    import Tkinter as tk
 
 
 ##########################################################################
@@ -174,6 +174,7 @@ except:
 class GraphicsError(Exception):
     """Generic error class for graphics module exceptions."""
     pass
+
 
 OBJ_ALREADY_DRAWN = "Object currently drawn"
 UNSUPPORTED_METHOD = "Object doesn't support operation"
@@ -186,6 +187,7 @@ _root = tk.Tk()
 _root.withdraw()
 
 _update_lasttime = time.time()
+
 
 def update(rate=None):
     global _update_lasttime
@@ -202,7 +204,8 @@ def update(rate=None):
 
 ############################################################################
 # Graphics classes start here
-        
+
+
 class GraphWin(tk.Canvas):
 
     """A GraphWin is a toplevel window for displaying graphics."""
@@ -216,7 +219,7 @@ class GraphWin(tk.Canvas):
                            highlightthickness=0, bd=0)
         self.master.title(title)
         self.pack()
-        master.resizable(0,0)
+        master.resizable(0, 0)
         self.foreground = "black"
         self.items = []
         self.mouseX = None
@@ -231,15 +234,16 @@ class GraphWin(tk.Canvas):
         self.closed = False
         master.lift()
         self.lastKey = ""
-        if autoflush: _root.update()
+        if autoflush:
+            _root.update()
 
     def __repr__(self):
         if self.isClosed():
             return "<Closed GraphWin>"
         else:
             return "GraphWin('{}', {}, {})".format(self.master.title(),
-                                             self.getWidth(),
-                                             self.getHeight())
+                                                   self.getWidth(),
+                                                   self.getHeight())
 
     def __str__(self):
         return repr(self)
@@ -250,7 +254,6 @@ class GraphWin(tk.Canvas):
 
     def _onKey(self, evnt):
         self.lastKey = evnt.keysym
-
 
     def setBackground(self, color):
         """Set background color of the window"""
@@ -267,37 +270,34 @@ class GraphWin(tk.Canvas):
     def close(self):
         """Close the window"""
 
-        if self.closed: return
+        if self.closed:
+            return
         self.closed = True
         self.master.destroy()
         self.__autoflush()
 
-
     def isClosed(self):
         return self.closed
 
-
     def isOpen(self):
         return not self.closed
-
 
     def __autoflush(self):
         if self.autoflush:
             _root.update()
 
-    
     def plot(self, x, y, color="black"):
         """Set pixel (x,y) to the given color"""
         self.__checkOpen()
-        xs,ys = self.toScreen(x,y)
-        self.create_line(xs,ys,xs+1,ys, fill=color)
+        xs, ys = self.toScreen(x, y)
+        self.create_line(xs, ys, xs+1, ys, fill=color)
         self.__autoflush()
         
     def plotPixel(self, x, y, color="black"):
         """Set pixel raw (independent of window coordinates) pixel
         (x,y) to color"""
         self.__checkOpen()
-        self.create_line(x,y,x+1,y, fill=color)
+        self.create_line(x, y, x+1, y, fill=color)
         self.__autoflush()
       
     def flush(self):
@@ -313,12 +313,13 @@ class GraphWin(tk.Canvas):
         self.mouseY = None
         while self.mouseX == None or self.mouseY == None:
             self.update()
-            if self.isClosed(): raise GraphicsError("getMouse in closed window")
-            time.sleep(.1) # give up thread
-        x,y = self.toWorld(self.mouseX, self.mouseY)
+            if self.isClosed():
+                raise GraphicsError("getMouse in closed window")
+            time.sleep(.1)  # give up thread
+        x, y = self.toWorld(self.mouseX, self.mouseY)
         self.mouseX = None
         self.mouseY = None
-        return Point(x,y)
+        return Point(x, y)
 
     def checkMouse(self):
         """Return last mouse click or None if mouse has
@@ -327,10 +328,10 @@ class GraphWin(tk.Canvas):
             raise GraphicsError("checkMouse in closed window")
         self.update()
         if self.mouseX != None and self.mouseY != None:
-            x,y = self.toWorld(self.mouseX, self.mouseY)
+            x, y = self.toWorld(self.mouseX, self.mouseY)
             self.mouseX = None
             self.mouseY = None
-            return Point(x,y)
+            return Point(x, y)
         else:
             return None
 
@@ -339,8 +340,9 @@ class GraphWin(tk.Canvas):
         self.lastKey = ""
         while self.lastKey == "":
             self.update()
-            if self.isClosed(): raise GraphicsError("getKey in closed window")
-            time.sleep(.1) # give up thread
+            if self.isClosed():
+                raise GraphicsError("getKey in closed window")
+            time.sleep(.1)  # give up thread
 
         key = self.lastKey
         self.lastKey = ""
@@ -366,16 +368,16 @@ class GraphWin(tk.Canvas):
     def toScreen(self, x, y):
         trans = self.trans
         if trans:
-            return self.trans.screen(x,y)
+            return self.trans.screen(x, y)
         else:
-            return x,y
+            return x, y
                       
     def toWorld(self, x, y):
         trans = self.trans
         if trans:
-            return self.trans.world(x,y)
+            return self.trans.world(x, y)
         else:
-            return x,y
+            return x, y
         
     def setMouseHandler(self, func):
         self._mouseCallback = func
@@ -414,28 +416,29 @@ class Transform:
         self.xscale = xspan/float(w-1)
         self.yscale = yspan/float(h-1)
         
-    def screen(self,x,y):
+    def screen(self, x, y):
         # Returns x,y in screen (actually window) coordinates
         xs = (x-self.xbase) / self.xscale
         ys = (self.ybase-y) / self.yscale
-        return int(xs+0.5),int(ys+0.5)
+        return int(xs+0.5), int(ys+0.5)
         
-    def world(self,xs,ys):
+    def world(self, xs, ys):
         # Returns xs,ys in world coordinates
         x = xs*self.xscale + self.xbase
         y = self.ybase - ys*self.yscale
-        return x,y
+        return x, y
 
 
 # Default values for various item configuration options. Only a subset of
 #   keys may be present in the configuration dictionary for a given item
-DEFAULT_CONFIG = {"fill":"",
-      "outline":"black",
-      "width":"1",
-      "arrow":"none",
-      "text":"",
-      "justify":"center",
+DEFAULT_CONFIG = {"fill": "",
+                  "outline": "black",
+                  "width": "1",
+                  "arrow": "none",
+                  "text": "",
+                  "justify": "center",
                   "font": ("helvetica", 12, "normal")}
+
 
 class GraphicsObject:
 
@@ -478,8 +481,10 @@ class GraphicsObject:
         window. Raises an error if attempt made to draw an object that
         is already visible."""
 
-        if self.canvas and not self.canvas.isClosed(): raise GraphicsError(OBJ_ALREADY_DRAWN)
-        if graphwin.isClosed(): raise GraphicsError("Can't draw to closed window")
+        if self.canvas and not self.canvas.isClosed():
+            raise GraphicsError(OBJ_ALREADY_DRAWN)
+        if graphwin.isClosed():
+            raise GraphicsError("Can't draw to closed window")
         self.canvas = graphwin
         self.id = self._draw(graphwin, self.config)
         graphwin.addItem(self)
@@ -487,13 +492,13 @@ class GraphicsObject:
             _root.update()
         return self
 
-            
     def undraw(self):
 
         """Undraw the object (i.e. hide it). Returns silently if the
         object is not currently drawn."""
         
-        if not self.canvas: return
+        if not self.canvas:
+            return
         if not self.canvas.isClosed():
             self.canvas.delete(self.id)
             self.canvas.delItem(self)
@@ -502,18 +507,17 @@ class GraphicsObject:
         self.canvas = None
         self.id = None
 
-
     def move(self, dx, dy):
 
         """move object dx units in x direction and dy units in y
         direction"""
         
-        self._move(dx,dy)
+        self._move(dx, dy)
         canvas = self.canvas
         if canvas and not canvas.isClosed():
             trans = canvas.trans
             if trans:
-                x = dx/ trans.xscale 
+                x = dx / trans.xscale
                 y = -dy / trans.yscale
             else:
                 x = dx
@@ -535,16 +539,14 @@ class GraphicsObject:
             if self.canvas.autoflush:
                 _root.update()
 
-
     def _draw(self, canvas, options):
         """draws appropriate figure on canvas with options provided
         Returns Tk id of item drawn"""
-        pass # must override in subclass
-
+        pass  # must override in subclass
 
     def _move(self, dx, dy):
         """updates internal state of object to move it dx,dy units"""
-        pass # must override in subclass
+        pass  # must override in subclass
 
          
 class Point(GraphicsObject):
@@ -558,26 +560,27 @@ class Point(GraphicsObject):
         return "Point({}, {})".format(self.x, self.y)
         
     def _draw(self, canvas, options):
-        x,y = canvas.toScreen(self.x,self.y)
-        return canvas.create_rectangle(x,y,x+1,y+1,options)
+        x, y = canvas.toScreen(self.x, self.y)
+        return canvas.create_rectangle(x, y, x+1, y+1, options)
         
     def _move(self, dx, dy):
         self.x = self.x + dx
         self.y = self.y + dy
         
     def clone(self):
-        other = Point(self.x,self.y)
+        other = Point(self.x, self.y)
         other.config = self.config.copy()
         return other
                 
     def getX(self): return self.x
     def getY(self): return self.y
 
+
 class _BBox(GraphicsObject):
     # Internal base class for objects represented by bounding box
     # (opposite corners) Line segment is a degenerate case.
     
-    def __init__(self, p1, p2, options=["outline","width","fill"]):
+    def __init__(self, p1, p2, options=["outline", "width", "fill"]):
         GraphicsObject.__init__(self, options)
         self.p1 = p1.clone()
         self.p2 = p2.clone()
@@ -586,7 +589,7 @@ class _BBox(GraphicsObject):
         self.p1.x = self.p1.x + dx
         self.p1.y = self.p1.y + dy
         self.p2.x = self.p2.x + dx
-        self.p2.y = self.p2.y  + dy
+        self.p2.y = self.p2.y + dy
                 
     def getP1(self): return self.p1.clone()
 
@@ -609,9 +612,9 @@ class Rectangle(_BBox):
     def _draw(self, canvas, options):
         p1 = self.p1
         p2 = self.p2
-        x1,y1 = canvas.toScreen(p1.x,p1.y)
-        x2,y2 = canvas.toScreen(p2.x,p2.y)
-        return canvas.create_rectangle(x1,y1,x2,y2,options)
+        x1, y1 = canvas.toScreen(p1.x, p1.y)
+        x2, y2 = canvas.toScreen(p2.x, p2.y)
+        return canvas.create_rectangle(x1, y1, x2, y2, options)
         
     def clone(self):
         other = Rectangle(self.p1, self.p2)
@@ -627,7 +630,6 @@ class Oval(_BBox):
     def __repr__(self):
         return "Oval({}, {})".format(str(self.p1), str(self.p2))
 
-        
     def clone(self):
         other = Oval(self.p1, self.p2)
         other.config = self.config.copy()
@@ -636,10 +638,11 @@ class Oval(_BBox):
     def _draw(self, canvas, options):
         p1 = self.p1
         p2 = self.p2
-        x1,y1 = canvas.toScreen(p1.x,p1.y)
-        x2,y2 = canvas.toScreen(p2.x,p2.y)
-        return canvas.create_oval(x1,y1,x2,y2,options)
+        x1, y1 = canvas.toScreen(p1.x, p1.y)
+        x2, y2 = canvas.toScreen(p2.x, p2.y)
+        return canvas.create_oval(x1, y1, x2, y2, options)
     
+
 class Circle(Oval):
     
     def __init__(self, center, radius):
@@ -663,7 +666,7 @@ class Circle(Oval):
 class Line(_BBox):
     
     def __init__(self, p1, p2):
-        _BBox.__init__(self, p1, p2, ["arrow","fill","width"])
+        _BBox.__init__(self, p1, p2, ["arrow", "fill", "width"])
         self.setFill(DEFAULT_CONFIG['outline'])
         self.setOutline = self.setFill
 
@@ -678,12 +681,12 @@ class Line(_BBox):
     def _draw(self, canvas, options):
         p1 = self.p1
         p2 = self.p2
-        x1,y1 = canvas.toScreen(p1.x,p1.y)
-        x2,y2 = canvas.toScreen(p2.x,p2.y)
-        return canvas.create_line(x1,y1,x2,y2,options)
+        x1, y1 = canvas.toScreen(p1.x, p1.y)
+        x2, y2 = canvas.toScreen(p2.x, p2.y)
+        return canvas.create_line(x1, y1, x2, y2, options)
         
     def setArrow(self, option):
-        if not option in ["first","last","both","none"]:
+        if not option in ["first", "last", "both", "none"]:
             raise GraphicsError(BAD_OPTION)
         self._reconfig("arrow", option)
         
@@ -710,21 +713,22 @@ class Polygon(GraphicsObject):
 
     def _move(self, dx, dy):
         for p in self.points:
-            p.move(dx,dy)
+            p.move(dx, dy)
    
     def _draw(self, canvas, options):
         args = [canvas]
         for p in self.points:
-            x,y = canvas.toScreen(p.x,p.y)
+            x, y = canvas.toScreen(p.x, p.y)
             args.append(x)
             args.append(y)
         args.append(options)
         return GraphWin.create_polygon(*args) 
 
+
 class Text(GraphicsObject):
     
     def __init__(self, p, text):
-        GraphicsObject.__init__(self, ["justify","fill","text","font"])
+        GraphicsObject.__init__(self, ["justify", "fill", "text", "font"])
         self.setText(text)
         self.anchor = p.clone()
         self.setFill(DEFAULT_CONFIG['outline'])
@@ -735,18 +739,18 @@ class Text(GraphicsObject):
     
     def _draw(self, canvas, options):
         p = self.anchor
-        x,y = canvas.toScreen(p.x,p.y)
-        return canvas.create_text(x,y,options)
+        x, y = canvas.toScreen(p.x, p.y)
+        return canvas.create_text(x, y, options)
         
     def _move(self, dx, dy):
-        self.anchor.move(dx,dy)
+        self.anchor.move(dx, dy)
         
     def clone(self):
         other = Text(self.anchor, self.config['text'])
         other.config = self.config.copy()
         return other
 
-    def setText(self,text):
+    def setText(self, text):
         self._reconfig("text", text)
         
     def getText(self):
@@ -756,23 +760,23 @@ class Text(GraphicsObject):
         return self.anchor.clone()
 
     def setFace(self, face):
-        if face in ['helvetica','arial','courier','times roman']:
-            f,s,b = self.config['font']
-            self._reconfig("font",(face,s,b))
+        if face in ['helvetica', 'arial', 'courier', 'times roman']:
+            f, s, b = self.config['font']
+            self._reconfig("font", (face, s, b))
         else:
             raise GraphicsError(BAD_OPTION)
 
     def setSize(self, size):
         if 5 <= size <= 36:
-            f,s,b = self.config['font']
-            self._reconfig("font", (f,size,b))
+            f, s, b = self.config['font']
+            self._reconfig("font", (f, size, b))
         else:
             raise GraphicsError(BAD_OPTION)
 
     def setStyle(self, style):
-        if style in ['bold','normal','italic', 'bold italic']:
-            f,s,b = self.config['font']
-            self._reconfig("font", (f,s,style))
+        if style in ['bold', 'normal', 'italic', 'bold italic']:
+            f, s, b = self.config['font']
+            self._reconfig("font", (f, s, style))
         else:
             raise GraphicsError(BAD_OPTION)
 
@@ -785,7 +789,7 @@ class Entry(GraphicsObject):
     def __init__(self, p, width):
         GraphicsObject.__init__(self, [])
         self.anchor = p.clone()
-        #print self.anchor
+        # print self.anchor
         self.width = width
         self.text = tk.StringVar(_root)
         self.text.set("")
@@ -799,24 +803,24 @@ class Entry(GraphicsObject):
 
     def _draw(self, canvas, options):
         p = self.anchor
-        x,y = canvas.toScreen(p.x,p.y)
+        x, y = canvas.toScreen(p.x, p.y)
         frm = tk.Frame(canvas.master)
         self.entry = tk.Entry(frm,
                               width=self.width,
                               textvariable=self.text,
-                              bg = self.fill,
-                              fg = self.color,
+                              bg=self.fill,
+                              fg=self.color,
                               font=self.font)
         self.entry.pack()
-        #self.setFill(self.fill)
+        # self.setFill(self.fill)
         self.entry.focus_set()
-        return canvas.create_window(x,y,window=frm)
+        return canvas.create_window(x, y, window=frm)
 
     def getText(self):
         return self.text.get()
 
     def _move(self, dx, dy):
-        self.anchor.move(dx,dy)
+        self.anchor.move(dx, dy)
 
     def getAnchor(self):
         return self.anchor.clone()
@@ -832,13 +836,11 @@ class Entry(GraphicsObject):
     def setText(self, t):
         self.text.set(t)
 
-            
     def setFill(self, color):
         self.fill = color
         if self.entry:
             self.entry.config(bg=color)
 
-            
     def _setFontComponent(self, which, value):
         font = list(self.font)
         font[which] = value
@@ -846,27 +848,26 @@ class Entry(GraphicsObject):
         if self.entry:
             self.entry.config(font=self.font)
 
-
     def setFace(self, face):
-        if face in ['helvetica','arial','courier','times roman']:
+        if face in ['helvetica', 'arial', 'courier', 'times roman']:
             self._setFontComponent(0, face)
         else:
             raise GraphicsError(BAD_OPTION)
 
     def setSize(self, size):
         if 5 <= size <= 36:
-            self._setFontComponent(1,size)
+            self._setFontComponent(1, size)
         else:
             raise GraphicsError(BAD_OPTION)
 
     def setStyle(self, style):
-        if style in ['bold','normal','italic', 'bold italic']:
-            self._setFontComponent(2,style)
+        if style in ['bold', 'normal', 'italic', 'bold italic']:
+            self._setFontComponent(2, style)
         else:
             raise GraphicsError(BAD_OPTION)
 
     def setTextColor(self, color):
-        self.color=color
+        self.color = color
         if self.entry:
             self.entry.config(fg=color)
 
@@ -874,16 +875,16 @@ class Entry(GraphicsObject):
 class Image(GraphicsObject):
 
     idCount = 0
-    imageCache = {} # tk photoimages go here to avoid GC while drawn 
+    imageCache = {}  # tk photoimages go here to avoid GC while drawn
     
     def __init__(self, p, *pixmap):
         GraphicsObject.__init__(self, [])
         self.anchor = p.clone()
         self.imageId = Image.idCount
         Image.idCount = Image.idCount + 1
-        if len(pixmap) == 1: # file name provided
+        if len(pixmap) == 1:  # file name provided
             self.img = tk.PhotoImage(file=pixmap[0], master=_root)
-        else: # width and height provided
+        else:  # width and height provided
             width, height = pixmap
             self.img = tk.PhotoImage(master=_root, width=width, height=height)
 
@@ -892,12 +893,12 @@ class Image(GraphicsObject):
                 
     def _draw(self, canvas, options):
         p = self.anchor
-        x,y = canvas.toScreen(p.x,p.y)
-        self.imageCache[self.imageId] = self.img # save a reference  
-        return canvas.create_image(x,y,image=self.img)
+        x, y = canvas.toScreen(p.x, p.y)
+        self.imageCache[self.imageId] = self.img  # save a reference
+        return canvas.create_image(x, y, image=self.img)
     
     def _move(self, dx, dy):
-        self.anchor.move(dx,dy)
+        self.anchor.move(dx, dy)
         
     def undraw(self):
         try:
@@ -910,7 +911,7 @@ class Image(GraphicsObject):
         return self.anchor.clone()
         
     def clone(self):
-        other = Image(Point(0,0), 0, 0)
+        other = Image(Point(0, 0), 0, 0)
         other.img = self.img.copy()
         other.anchor = self.anchor.clone()
         other.config = self.config.copy()
@@ -930,10 +931,10 @@ class Image(GraphicsObject):
 
         """
         
-        value = self.img.get(x,y) 
-        if type(value) ==  type(0):
+        value = self.img.get(x, y)
+        if type(value) == type(0):
             return [value, value, value]
-        elif type(value) == type((0,0,0)):
+        elif type(value) == type((0, 0, 0)):
             return list(value)
         else:
             return list(map(int, value.split())) 
@@ -943,7 +944,6 @@ class Image(GraphicsObject):
         
         """
         self.img.put("{" + color +"}", (x, y))
-        
 
     def save(self, filename):
         """Saves the pixmap image to filename.
@@ -953,22 +953,23 @@ class Image(GraphicsObject):
         
         path, name = os.path.split(filename)
         ext = name.split(".")[-1]
-        self.img.write( filename, format=ext)
+        self.img.write(filename, format=ext)
 
         
-def color_rgb(r,g,b):
+def color_rgb(r, g, b):
     """r,g,b are intensities of red, green, and blue in range(256)
     Returns color specifier string for the resulting color"""
-    return "#%02x%02x%02x" % (r,g,b)
+    return "#%02x%02x%02x" % (r, g, b)
+
 
 def test():
     win = GraphWin()
-    win.setCoords(0,0,10,10)
-    t = Text(Point(5,5), "Centered Text")
+    win.setCoords(0, 0, 10, 10)
+    t = Text(Point(5, 5), "Centered Text")
     t.draw(win)
-    p = Polygon(Point(1,1), Point(5,3), Point(2,7))
+    p = Polygon(Point(1, 1), Point(5, 3), Point(2, 7))
     p.draw(win)
-    e = Entry(Point(5,6), 10)
+    e = Entry(Point(5, 6), 10)
     e.draw(win)
     win.getMouse()
     p.setFill("red")
@@ -980,9 +981,9 @@ def test():
     t.setText(e.getText())
     e.setFill("green")
     e.setText("Spam!")
-    e.move(2,0)
+    e.move(2, 0)
     win.getMouse()
-    p.move(2,3)
+    p.move(2, 3)
     s = ""
     for pt in p.getPoints():
         s = s + "(%0.1f,%0.1f) " % (pt.getX(), pt.getY())
@@ -1005,9 +1006,9 @@ def test():
     win.getMouse()
     win.close()
 
-#MacOS fix 2
-#tk.Toplevel(_root).destroy()
 
+# MacOS fix 2
+# tk.Toplevel(_root).destroy()
 # MacOS fix 1
 update()
 
