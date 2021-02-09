@@ -46,7 +46,7 @@ def draw_circle(board_column, board_row, color, dot_size):
     head.draw(win)
 
 
-def draw_board(current_board):
+def draw_board():
     print("Game On")
     for boardRow in range(gameBoardSize[0]):
         for boardColumn in range(gameBoardSize[1]):
@@ -57,7 +57,7 @@ def draw_board(current_board):
                 draw_circle(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
 
 
-def erase_board(current_board):
+def erase_board():
     print("Game Over")
     for boardRow in range(gameBoardSize[0]):
         for boardColumn in range(gameBoardSize[1]):
@@ -78,7 +78,7 @@ def animate_board():
 
 
 def debug_print():
-    print("movepikman: C:" + str(pikLocation[0]) + " R:" + str(pikLocation[1]))
+    print("move pikman: C:" + str(pikLocation[0]) + " R:" + str(pikLocation[1]))
     print(" " + str(gameBoard[pikLocation[0] + 1][pikLocation[1] - 1]) + str(
         gameBoard[pikLocation[0] + 1][pikLocation[1] + 0]) + str(gameBoard[pikLocation[0] + 1][pikLocation[1] + 1]))
     print(" " + str(gameBoard[pikLocation[0] - 0][pikLocation[1] - 1]) + "x" + str(
@@ -137,7 +137,7 @@ def check_score(pik_row, pik_col):
 
 
 def move_pikman(pik_move):
-    #    print("movepikman:" + str(pikLocation[0]) + str(pikLocation[1]))
+    # print("move pikman:" + str(pikLocation[0]) + str(pikLocation[1]))
     draw_circle(pikLocation[1], pikLocation[0], gameColor[0], size)
     global pikScore
 
@@ -166,7 +166,7 @@ def move_pikman(pik_move):
             pikLocation[0] = pikLocation[0] - 0
             pikLocation[1] = pikLocation[1] - 1
     debug_print()
-    print("movepikman: C:" + str(pikLocation[0]) + " R:" + str(pikLocation[1]) + " K:" + str(pik_move))
+    print("move pikman: C:" + str(pikLocation[0]) + " R:" + str(pikLocation[1]) + " K:" + str(pik_move))
 
 
 def check_capture():
@@ -212,14 +212,14 @@ game2 = (
     [1, 1, 1, 1, 1, 1, 1])
 
 gameBoard = game2
-gameBoardSize = [11,7]
+gameBoardSize = [11, 7]
 gameColor = ["black", "blue", "red", "pink", "green", "white"]
 pikLocation = [4, 3]  # R, C (goofy)
 pikColor = 2
 pikScore = 0
 maxScore = 590
 
-size = 20 # 10 is the minimum for now
+size = 20  # 10 is the minimum for now
 offsetC = size * 4
 offsetR = size * 2
 win = GraphWin("pikMan", (size * 20), (size * 30))
@@ -235,7 +235,7 @@ print(gameBoard[1][2])
 
 win.setBackground("black")
 # win.setBackground("white")
-draw_board(gameBoard)
+draw_board()
 
 noticeText = Text(Point(win.getWidth() / 2, 250), "Welcome to Wonderland")
 noticeText.setTextColor("yellow")
@@ -281,7 +281,7 @@ while alive:
 
     time.sleep(.1)
 
-erase_board(gameBoard)
+erase_board()
 win.getMouse()
 final_score()
 win.close()
