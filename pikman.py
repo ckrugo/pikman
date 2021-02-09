@@ -15,6 +15,7 @@ from graphics import *
 # Used John Zelle's graphics lib from https://mcsp.wartburg.edu/zelle/python/graphics.py
 import time
 
+
 def draw_rec(board_column, board_row, color, dot_size):
     rtl = (board_column * (size * 2)) + offsetC
     rtr = (board_row * (size * 2)) + offsetR
@@ -27,14 +28,18 @@ def draw_rec(board_column, board_row, color, dot_size):
     head.setOutline(color)
     head.draw(win)
 
+
 def draw_circle(board_column, board_row, color, dot_size):
     if color != "white":
-        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)), (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
+        head = Circle(Point((board_column * (size * 2) +
+                             (offsetC + dot_size)), (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
         head.setFill(color)
     else:
-        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)), (board_row * (size * 2) + (offsetR + dot_size))), dot_size / 3)
+        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)),
+                            (board_row * (size * 2) + (offsetR + dot_size))), dot_size / 3)
         head.setFill(color)
     head.draw(win)
+
 
 def draw_board(current_board):
     print("Game On")
@@ -46,12 +51,14 @@ def draw_board(current_board):
             else:
                draw_circle(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
 
+
 def erase_board(current_board):
     print("Game Over")
     for boardRow in range(gameBoardSize[0]):
         for boardColumn in range(gameBoardSize[1]):
             draw_rec(boardColumn, boardRow, gameColor[0], size)
         print(' ')
+
 
 def animate_board():
     #    print("animateBoard")
@@ -64,6 +71,7 @@ def animate_board():
                 draw_circle(boardColumn, boardRow, gameColor[gameBoard[boardRow][boardColumn]], size)
                 gameBoard[boardRow][boardColumn] = 3
 
+
 def debug_print():
     print("movepikman: C:" + str(pikLocation[0]) + " R:" + str(pikLocation[1]))
     print(" " + str(gameBoard[pikLocation[0] + 1][pikLocation[1] - 1]) + str(
@@ -73,12 +81,15 @@ def debug_print():
     print(" " + str(gameBoard[pikLocation[0] - 1][pikLocation[1] - 1]) + str(
         gameBoard[pikLocation[0] - 1][pikLocation[1] - 0]) + str(gameBoard[pikLocation[0] - 1][pikLocation[1] + 1]))
 
+
 def draw_pik_score(pik_score, game_timer):
     scoreText.setText("Score: " + str(pik_score) + " Timer: " + str(game_timer))
+
 
 def draw_notice(note_message, note_color):
     noticeText.setText(note_message)
     noticeText.setTextColor(note_color)
+
 
 def draw_pikman(pik_location, pik_color1):
     if pik_color1 == "yellow":
@@ -98,6 +109,7 @@ def draw_pikman(pik_location, pik_color1):
         head1.draw(win)
     return pik_color1
 
+
 def check_score(pik_row, pik_col):
     global pikScore
     if gameBoard[pik_row][pik_col] == 3:
@@ -115,6 +127,7 @@ def check_score(pik_row, pik_col):
         pikScore = pikScore + 10
         draw_pik_score(pikScore, "white")
         gameBoard[pik_row][pik_col] = 0
+
 
 def move_pikman(pik_move):
     #    print("movepikman:" + str(pikLocation[0]) + str(pikLocation[1]))
@@ -148,11 +161,14 @@ def move_pikman(pik_move):
     debug_print()
     print("movepikman: C:" + str(pikLocation[0]) + " R:" + str(pikLocation[1]) + " K:" + str(pik_move))
 
+
 def check_capture():
     print("checkCapture")
 
+
 def calc_score():
     print("calcScore")
+
 
 def final_score():
     print("finalScore")
