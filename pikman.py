@@ -36,8 +36,8 @@ def draw_rec(board_column, board_row, color, dot_size):
 
 def draw_circle(board_column, board_row, color, dot_size):
     if color != "white":
-        head = Circle(Point((board_column * (size * 2) +
-                             (offsetC + dot_size)), (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
+        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)),
+                            (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
         head.setFill(color)
     else:
         head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)),
@@ -103,13 +103,13 @@ def draw_pikman(pik_location, pik_color1):
     else:
         pik_color1 = "yellow"
         draw_circle(pik_location[1], pik_location[0], pik_color1, size)
-#        head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)),
+#       head = Circle(Point((board_column * (size * 2) + (offsetC + dot_size)),
         #        (board_row * (size * 2) + (offsetR + dot_size))), dot_size)
         head1 = Polygon(Point((pik_location[1] * (size * 2) + (offsetC + size)),
-                              (pik_location[0] * (size * 2) + (offsetR+size))),
-                        Point((pik_location[1] * (size * 2) + offsetC + size*2),
-                              (pik_location[0] * (size * 2) + offsetR + size*2)),
-                        Point((pik_location[1] * (size * 2) + offsetC + size*2),
+                              (pik_location[0] * (size * 2) + (offsetR + size))),
+                        Point((pik_location[1] * (size * 2) + offsetC + size * 2),
+                              (pik_location[0] * (size * 2) + offsetR + size * 2)),
+                        Point((pik_location[1] * (size * 2) + offsetC + size * 2),
                               (pik_location[0] * (size * 2) + (offsetR + size)))
                         )
         head1.setFill("black")
@@ -271,7 +271,7 @@ while alive:
         # gameTimer = gameTimer - 1
         gameTimer = time.time() - gameStart
         draw_pik_score(pikScore, f"{gameTimer:.1f}")
-        print("time: " + str(f'{gameTimer:.1f}'))
+        # print("time: " + str(f'{gameTimer:.1f}'))
     animate_board()
     pikColor = draw_pikman(pikLocation, pikColor)
     if pikScore >= maxScore:
